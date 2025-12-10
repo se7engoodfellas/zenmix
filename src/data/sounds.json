@@ -12,5 +12,33 @@
     "icon": "Bird",
     "src": "/sounds/bird.mp3",
     "color": "bg-green-600"
+  },
+  {
+    "id": "ocean",
+    "label": "Ocean Waves",
+    "icon": "Waves",
+    "src": "/sounds/ocean.mp3",
+    "color": "bg-teal-500"
+  },
+  {
+    "id": "chimes",
+    "label": "Wind Chimes",
+    "icon": "Bell",
+    "src": "/sounds/chimes.mp3",
+    "color": "bg-purple-400"
+  },
+  {
+    "id": "campfire",
+    "label": "Campfire Crackling",
+    "icon": "Flame",
+    "src": "/sounds/campfire.mp3",
+    "color": "bg-orange-600"
+  },
+  {
+    "id": "thunder",
+    "label": "Thunderstorm",
+    "icon": "CloudLightning",
+    "src": "/sounds/thunder.mp3",
+    "color": "bg-gray-700"
   }
 ]
