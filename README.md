@@ -2,7 +2,7 @@
 
 **Focus better. Relax deeper. Build your perfect soundscape.**
 
-![ZenMix](https://github.com/user-attachments/assets/placeholder-screenshot.png)
+![ZenMix](./assets/preview.png)
 
 <!-- _(Live demo: https://zenmix.live)_ -->
 
