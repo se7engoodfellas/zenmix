@@ -57,7 +57,7 @@ const SoundCard = ({ sound }) => {
   return (
     <div
       className={`
-        relative p-6 rounded-2xl transition-all duration-300 border border-transparent
+        relative p-6 rounded-2xl transition-all duration-300 border border-transparent hover:-translate-y-2
         ${
           isPlaying
             ? `${sound.color} shadow-lg scale-105`
