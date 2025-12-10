@@ -1,17 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as Icons from "lucide-react";
 
-const SoundCard = ({ sound }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+// Πλέον το SoundCard δεν έχει δικό του state.
+// Παίρνει εντολές (props) από το App.jsx.
+const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange }) => {
   const audioRef = useRef(null);
-
-  // Calculate volume percentage for the tooltip
+  const IconComponent = Icons[sound.icon] || Icons.HelpCircle;
   const volumePercent = Math.round(volume * 100);
 
-  const IconComponent = Icons[sound.icon] || Icons.HelpCircle;
+  // --- AUDIO LOGIC ---
 
-  // EFFECT 1: Handle Audio Creation and Destruction
+  // 1. Init Audio
   useEffect(() => {
     const audio = new Audio(sound.src);
     audio.loop = true;
@@ -25,39 +24,27 @@ const SoundCard = ({ sound }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sound.src]);
 
-  // EFFECT 2: Handle Volume Updates
+  // 2. Handle Volume Updates
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
 
-  // EFFECT 3: Handle Play/Pause State
+  // 3. Handle Play/Pause
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current
-          .play()
-          .catch((e) => console.log("Audio play failed:", e));
+        audioRef.current.play().catch((e) => console.error("Play error:", e));
       } else {
         audioRef.current.pause();
       }
     }
   }, [isPlaying]);
 
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleVolumeChange = (e) => {
-    setVolume(parseFloat(e.target.value));
-  };
-
   return (
     <div
-      // MERGED FEATURE 1: Tooltip
       title={`Volume: ${volumePercent}%`}
-      // MERGED FEATURE 2: Hover Animation (hover:-translate-y-2)
       className={`
         relative p-6 rounded-2xl transition-all duration-300 border border-transparent hover:-translate-y-2
         ${
@@ -69,7 +56,7 @@ const SoundCard = ({ sound }) => {
     >
       <div className="flex flex-col items-center gap-4">
         <button
-          onClick={togglePlay}
+          onClick={() => onToggle(sound.id)} // Καλούμε τη συνάρτηση του App
           className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
         >
           <IconComponent
@@ -92,7 +79,9 @@ const SoundCard = ({ sound }) => {
             max="1"
             step="0.01"
             value={volume}
-            onChange={handleVolumeChange}
+            onChange={(e) =>
+              onVolumeChange(sound.id, parseFloat(e.target.value))
+            }
             className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white"
           />
         </div>

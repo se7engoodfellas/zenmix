@@ -1,0 +1,32 @@
+[
+  {
+    "id": "focus",
+    "name": "Deep Focus",
+    "emoji": "🧠",
+    "mix": {
+      "rain": 0.6,
+      "ocean": 0.4,
+      "thunder": 0.2
+    }
+  },
+  {
+    "id": "relax",
+    "name": "Cozy Cabin",
+    "emoji": "🔥",
+    "mix": {
+      "campfire": 0.8,
+      "rain": 0.3,
+      "bird": 0.1
+    }
+  },
+  {
+    "id": "sleep",
+    "name": "Sleepy Night",
+    "emoji": "🌙",
+    "mix": {
+      "ocean": 0.6,
+      "chimes": 0.3,
+      "rain": 0.2
+    }
+  }
+]
