@@ -3,7 +3,7 @@ import * as Icons from "lucide-react";
 
 // Πλέον το SoundCard δεν έχει δικό του state.
 // Παίρνει εντολές (props) από το App.jsx.
-const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange }) => {
+const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange,isGloballyMuted }) => {
   const audioRef = useRef(null);
   const IconComponent = Icons[sound.icon] || Icons.HelpCircle;
   const volumePercent = Math.round(volume * 100);
@@ -26,10 +26,10 @@ const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange }) => {
 
   // 2. Handle Volume Updates
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && !isGloballyMuted) {
       audioRef.current.volume = volume;
     }
-  }, [volume]);
+  }, [volume, isGloballyMuted]);
 
   // 3. Handle Play/Pause
   useEffect(() => {
@@ -41,6 +41,19 @@ const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange }) => {
       }
     }
   }, [isPlaying]);
+
+  // This effect ensures the actual audio element reflects the global mute status
+  useEffect(() => {
+    if (audioRef.current && isPlaying) { // Only affect currently playing sounds
+      if (isGloballyMuted) {
+        // Mute the volume immediately (set to 0)
+        audioRef.current.volume = 0;
+      } else {
+        // Restore volume to user's setting (volume prop)
+        audioRef.current.volume = volume;
+      }
+    }
+  }, [isGloballyMuted, isPlaying, volume]);
 
   return (
     <div

@@ -2,10 +2,11 @@ import { useState } from "react";
 import SoundCard from "./components/SoundCard";
 import PresetSelector from "./components/PresetSelector";
 import { useSounds } from "./hooks/useSounds";
+import { Volume2, VolumeX } from "lucide-react";
 
 function App() {
   const { sounds } = useSounds();
-
+  const [isMuted, setIsMuted] = useState(false);
   // STATE: holds play status and volume for each sound
   // Format: { "rain": { isPlaying: false, volume: 0.5 }, "fire": ... }
   const [soundStates, setSoundStates] = useState({});
@@ -65,14 +66,30 @@ function App() {
 
     setSoundStates(newStates);
   };
+  const toggleMute = () => {
+    setIsMuted(prev => !prev);
+  };
+  
+  const MuteIcon = isMuted ? VolumeX : Volume2;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10 font-sans">
-      <header className="mb-10 text-center">
+      <header className="mb-10 flex justify-between items-start max-w-5xl mx-auto">
+        <div>
         <h1 className="text-4xl font-bold mb-2 tracking-tight text-blue-100">
           ZenMix
         </h1>
         <p className="text-gray-400">Mix your perfect soundscape.</p>
+        </div>
+        <button
+          onClick={toggleMute}
+          className={`p-3 rounded-full transition-colors duration-300 ${
+            isMuted ? "bg-red-600 hover:bg-red-700" : "bg-white/10 hover:bg-white/20"
+          }`}
+          aria-label={isMuted ? "Unmute all sounds" : "Mute all sounds"}
+        >
+          <MuteIcon size={24} className="text-white" />
+        </button>
       </header>
 
       {/* Preset Selector */}
