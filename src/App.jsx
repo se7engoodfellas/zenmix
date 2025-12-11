@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SoundCard from "./components/SoundCard";
 import PresetSelector from "./components/PresetSelector";
 import { useSounds } from "./hooks/useSounds";
@@ -65,6 +65,29 @@ function App() {
 
     setSoundStates(newStates);
   };
+
+  // Toggle Play/Pause for all sounds on Space
+  useEffect(() => {
+    const handleToggleSoundAll = (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+
+        setSoundStates((prev) => {
+          const isPlaying = Object.values(prev).some(s => s.isPlaying);
+          const updatedSoundStates = {};
+          
+          sounds.forEach((sound) => {
+            const current = prev[sound.id] || { isPlaying: false, volume: 0.5 };
+            updatedSoundStates[sound.id] = { ...current, isPlaying: !isPlaying };
+          });
+          return updatedSoundStates;
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleToggleSoundAll);
+    return () => window.removeEventListener("keydown", handleToggleSoundAll);
+  }, [sounds]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10 font-sans">
