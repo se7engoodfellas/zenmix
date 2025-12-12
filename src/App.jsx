@@ -10,6 +10,8 @@ function App() {
   // Format: { "rain": { isPlaying: false, volume: 0.5 }, "fire": ... }
   const [soundStates, setSoundStates] = useState({});
 
+  // STATE: holds value in the search Bar
+  const [search, setSearch] = useState('')
   // Helper to get a sound's state (or defaults if missing)
   const getSoundState = (id) =>
     soundStates[id] || { isPlaying: false, volume: 0.5 };
@@ -75,6 +77,16 @@ function App() {
         <p className="text-gray-400">Mix your perfect soundscape.</p>
       </header>
 
+      {/* Search Bar */}
+        <div className="flex justify-center">
+          <input
+           placeholder="🔍 Search for sounds"
+           className="bg-white/10 hover:bg-white/20 rounded-2xl text-center w-2/5 h-8 mb-10"
+           onChange={(e) => {setSearch(e.target.value)}}
+          />
+        </div>
+
+
       {/* Preset Selector */}
       <PresetSelector onSelectPreset={handleSelectPreset} />
 
@@ -82,17 +94,19 @@ function App() {
       <main className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {sounds.map((sound) => {
           const state = getSoundState(sound.id);
-          return (
-            <SoundCard
-              key={sound.id}
-              sound={sound}
-              // pass state and controls to child
-              isPlaying={state.isPlaying}
-              volume={state.volume}
-              onToggle={toggleSound}
-              onVolumeChange={changeVolume}
-            />
-          );
+          if(sound.label.toLowerCase().includes(search.toLowerCase())){
+            return (
+              <SoundCard
+                key={sound.id}
+                sound={sound}
+                // pass state and controls to child
+                isPlaying={state.isPlaying}
+                volume={state.volume}
+                onToggle={toggleSound}
+                onVolumeChange={changeVolume}
+              />
+            );
+          }
         })}
       </main>
     </div>
