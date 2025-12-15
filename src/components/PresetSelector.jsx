@@ -1,6 +1,6 @@
 import presetsData from "../data/presets.json";
 
-const PresetSelector = ({ onSelectPreset }) => {
+const PresetSelector = ({ setActiveSounds, onSelectPreset }) => {
   return (
     <div className="flex flex-wrap justify-center gap-4 mb-8">
       {presetsData.map((preset) => (
@@ -22,7 +22,10 @@ const PresetSelector = ({ onSelectPreset }) => {
 
       {/* Κουμπί Reset για να τα κλείνει όλα */}
       <button
-        onClick={() => onSelectPreset(null)}
+        onClick={() => {
+          onSelectPreset(null)
+          setActiveSounds([])
+        }}
         className="px-4 py-2 text-sm text-red-400 hover:text-red-300 font-medium"
       >
         Reset All
