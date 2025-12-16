@@ -74,7 +74,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10 font-sans">
-      <header className="mb-10 flex justify-between items-start max-w-5xl mx-auto">
+      <header className="mb-10 relative flex justify-center items-center max-w-5xl mx-auto">
         <div>
         <h1 className="text-4xl font-bold mb-2 tracking-tight text-blue-100">
           ZenMix
@@ -83,7 +83,7 @@ function App() {
         </div>
         <button
           onClick={toggleMute}
-          className={`p-3 rounded-full transition-colors duration-300 ${
+          className={`absolute right-0 p-3 rounded-full transition-colors duration-300 ${
             isMuted ? "bg-red-600 hover:bg-red-700" : "bg-white/10 hover:bg-white/20"
           }`}
           aria-label={isMuted ? "Unmute all sounds" : "Mute all sounds"}
@@ -108,6 +108,7 @@ function App() {
               volume={state.volume}
               onToggle={toggleSound}
               onVolumeChange={changeVolume}
+              isGloballyMuted={isMuted}
             />
           );
         })}

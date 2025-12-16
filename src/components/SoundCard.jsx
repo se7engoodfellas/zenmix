@@ -95,7 +95,9 @@ const SoundCard = ({ sound, isPlaying, volume, onToggle, onVolumeChange,isGlobal
             onChange={(e) =>
               onVolumeChange(sound.id, parseFloat(e.target.value))
             }
-            className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-white"
+            disabled={isGloballyMuted}
+            className={`w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer
+        ${isGloballyMuted ? "opacity-50 accent-gray-400" : "accent-white"}`}
           />
         </div>
       </div>
