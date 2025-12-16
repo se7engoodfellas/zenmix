@@ -9,10 +9,13 @@ const PresetSelector = ({ setActiveSounds, onSelectPreset }) => {
           onClick={() => onSelectPreset(preset)}
           className="
             flex items-center gap-2 px-4 py-2 
-            bg-gray-800 hover:bg-gray-700 
-            border border-gray-700 hover:border-blue-500
-            rounded-full transition-all duration-200
-            text-sm font-medium text-gray-300 hover:text-white
+            border rounded-full transition-all duration-200 text-sm font-medium
+            
+            /* LIGHT DEFAULT Styles */
+            bg-white text-gray-700 border-gray-300 hover:border-blue-500
+            
+            /* DARK OVERRIDE Styles */
+            dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:text-white
           "
         >
           <span>{preset.emoji}</span>
@@ -26,7 +29,8 @@ const PresetSelector = ({ setActiveSounds, onSelectPreset }) => {
           onSelectPreset(null)
           setActiveSounds([])
         }}
-        className="px-4 py-2 text-sm text-red-400 hover:text-red-300 font-medium"
+        // LIGHT DEFAULT: text-red-500. DARK OVERRIDE: dark:text-red-400
+        className="px-4 py-2 text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-medium"
       >
         Reset All
       </button>
