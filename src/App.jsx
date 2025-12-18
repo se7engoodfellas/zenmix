@@ -3,7 +3,7 @@ import SoundCard from "./components/SoundCard";
 import PresetSelector from "./components/PresetSelector";
 import { useSounds } from "./hooks/useSounds";
 import { useActiveSounds } from "./hooks/useActiveSounds";
-
+import { X, Play } from "lucide-react";
 function App() {
   const { sounds } = useSounds();
   
