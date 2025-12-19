@@ -4,12 +4,15 @@ import PresetSelector from "./components/PresetSelector";
 import { useSounds } from "./hooks/useSounds";
 import { useActiveSounds } from "./hooks/useActiveSounds";
 import { X, Play } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
+
 function App() {
   const { sounds } = useSounds();
-  
-  const [hasSaveData, setHasSaveData] = useState(false)
 
-  const [hasResponded, setHasResponded] = useState(false)
+  const [hasSaveData, setHasSaveData] = useState(false);
+
+  const [hasResponded, setHasResponded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   // STATE: holds play status and volume for each sound
   // Format: { "rain": { isPlaying: false, volume: 0.5 }, "fire": ... }
@@ -29,14 +32,16 @@ function App() {
           delete savedData[keys[i]]
         }
       }
-      return savedData
+      return savedData;
     }
 
     return saved ? modifyLastSave() : {};
   });
 
-  useEffect(() => { localStorage.setItem("zenmix-state", JSON.stringify(soundStates));}, [soundStates]);
-  
+  useEffect(() => {
+    localStorage.setItem("zenmix-state", JSON.stringify(soundStates));
+  }, [soundStates]);
+
   const {
     activeSounds,
     setActiveSounds,
@@ -45,7 +50,7 @@ function App() {
   } = useActiveSounds(setSoundStates);
 
   // STATE: holds value in the search Bar
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
   // Helper to get a sound's state (or defaults if missing)
   const getSoundState = (id) =>
     soundStates[id] || { isPlaying: false, volume: 0.5 };
@@ -54,14 +59,14 @@ function App() {
   const toggleSound = (id) => {
     setSoundStates((prev) => {
       const current = prev[id] || { isPlaying: false, volume: 0.5 };
-      
-       // Active sounds are added/removed on mouse click
-      toggleActiveSound(id, !current.isPlaying)
+
+      // Active sounds are added/removed on mouse click
+      toggleActiveSound(id, !current.isPlaying);
 
       return {
         ...prev,
         [id]: { ...current, isPlaying: !current.isPlaying },
-      }
+      };
     });
   };
 
@@ -88,7 +93,7 @@ function App() {
     const newStates = {};
 
     // Build a new active sounds state array from the preset
-    let activePreset = []
+    let activePreset = [];
 
     // Start with defaults for every sound
     sounds.forEach((sound) => {
@@ -96,7 +101,7 @@ function App() {
     });
 
     // Set empty active sounds before applying preset
-    setActiveSounds([])
+    setActiveSounds([]);
 
     // Then enable only the sounds defined in the preset
     Object.keys(preset.mix).forEach((soundId) => {
@@ -108,15 +113,20 @@ function App() {
         };
 
         // Adds preset item to activePreset array
-        activePreset.push(soundId)
+        activePreset.push(soundId);
         // Play active sounds on preset select
-        toggleActiveSound(soundId, true)
+        toggleActiveSound(soundId, true);
       }
     });
 
-    setActiveSounds(activePreset)
+    setActiveSounds(activePreset);
     setSoundStates(newStates);
   };
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
+  };
+
+  const MuteIcon = isMuted ? VolumeX : Volume2;
 
   // Event listener for toggling all active sounds
   useEffect(() => {
@@ -195,26 +205,41 @@ function App() {
             ZenMix
           </h1>
           <p className="text-gray-400">Mix your perfect soundscape.</p>
+          <button
+            onClick={toggleMute}
+            className={`absolute right-1/100 top-1/12 p-3 rounded-full transition-colors duration-300 ${
+              isMuted
+                ? "bg-red-600 hover:bg-red-700"
+                : "bg-white/10 hover:bg-white/20"
+            }`}
+            aria-label={isMuted ? "Unmute all sounds" : "Mute all sounds"}
+          >
+            <MuteIcon size={24} className="text-white" />
+          </button>
         </header>
 
         {/* Search Bar */}
-          <div className="flex justify-center">
-            <input
-             placeholder="🔍 Search for sounds"
-             className="bg-white/10 hover:bg-white/20 rounded-2xl text-center w-2/5 h-8 mb-10"
-             onChange={(e) => {setSearch(e.target.value)}}
-            />
-          </div>
-
+        <div className="flex justify-center">
+          <input
+            placeholder="🔍 Search for sounds"
+            className="bg-white/10 hover:bg-white/20 rounded-2xl text-center w-2/5 h-8 mb-10"
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+          />
+        </div>
 
         {/* Preset Selector */}
-        <PresetSelector setActiveSounds={setActiveSounds} onSelectPreset={handleSelectPreset} />
+        <PresetSelector
+          setActiveSounds={setActiveSounds}
+          onSelectPreset={handleSelectPreset}
+        />
 
         {/* Grid */}
         <main className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
           {sounds.map((sound) => {
             const state = getSoundState(sound.id);
-            if(sound.label.toLowerCase().includes(search.toLowerCase())){
+            if (sound.label.toLowerCase().includes(search.toLowerCase())) {
               return (
                 <SoundCard
                   key={sound.id}
@@ -224,6 +249,7 @@ function App() {
                   volume={state.volume}
                   onToggle={toggleSound}
                   onVolumeChange={changeVolume}
+                  isGloballyMuted={isMuted}
                 />
               );
             }
