@@ -18,18 +18,18 @@ function App() {
   // Format: { "rain": { isPlaying: false, volume: 0.5 }, "fire": ... }
   const [soundStates, setSoundStates] = useState(() => {
     const saved = localStorage.getItem("zenmix-state");
-
-    //modifies the saved object from localStorage
-    function modifyLastSave() {
-      saved.includes("true") ? setHasSaveData(true) : setHasSaveData(false);
-      const savedData = JSON.parse(saved);
-      const keys = Object.keys(savedData);
-      console.log(keys.length);
-      for (let i in keys) {
-        if (savedData[keys[i]].isPlaying) {
-          savedData[keys[i]].isPlaying = false;
-        } else {
-          delete savedData[keys[i]];
+    
+    //modifies the saved object from localStorage  
+    function modifyLastSave(){
+      saved.includes("true") ? setHasSaveData(true) : setHasSaveData(false)
+      const savedData = JSON.parse(saved)
+      const keys = Object.keys(savedData)
+      for (let i in keys){
+        if(savedData[keys[i]].isPlaying){
+          savedData[keys[i]].isPlaying = false
+        }
+        else{
+          delete savedData[keys[i]]
         }
       }
       return savedData;
@@ -143,11 +143,16 @@ function App() {
     return () => window.removeEventListener("keydown", handleToggleActive);
   }, [activeSounds, toggleActiveSoundAll]);
 
-  function handleResume() {
-    setHasResponded(true);
-    for (let i in Object.keys(soundStates)) {
-      soundStates[Object.keys(soundStates)[i]].isPlaying = true;
-    }
+  function handleResume(){
+    setHasResponded(true)
+    setSoundStates((prevStates) => {
+      const updatedStates = { ...prevStates };
+      Object.keys(updatedStates).forEach((key) => {
+        updatedStates[key].isPlaying = true;
+      });
+      localStorage.setItem("zenmix-state", JSON.stringify(updatedStates));
+      return updatedStates;
+    });
   }
 
   return (
