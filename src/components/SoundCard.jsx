@@ -101,7 +101,23 @@ const zenColorMap = {
     darkButtonBg: "bg-stone-800/50",
     darkButtonBgHover: "hover:bg-stone-700/60",
     darkAccent: "accent-stone-400"
-  }
+  },
+  "bg-brown-500": {
+    lightActiveBg: "bg-amber-100",
+    lightActiveBorder: "border-amber-700",
+    lightActiveText: "text-amber-800",
+    lightButtonBg: "bg-amber-700/20",
+    lightButtonBgHover: "hover:bg-amber-700/30",
+    lightAccent: "accent-amber-700",
+    lightInactiveButtonBg: "bg-amber-700/10",
+    lightInactiveButtonBgHover: "hover:bg-amber-700/20",
+    darkActiveBg: "bg-amber-900/40",
+    darkActiveBorder: "border-amber-700/60",
+    darkActiveText: "text-amber-200",
+    darkButtonBg: "bg-amber-800/40",
+    darkButtonBgHover: "hover:bg-amber-700/50",
+    darkAccent: "accent-amber-500",
+  },
 };
 
 const SoundCard = ({
