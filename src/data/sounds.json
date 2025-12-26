@@ -40,5 +40,12 @@
     "icon": "CloudLightning",
     "src": "/sounds/thunder.mp3",
     "color": "bg-gray-700"
+  },
+  {
+    "id": "coffee",
+    "label": "Coffee Shop",
+    "icon": "Coffee", 
+    "src":"/sounds/coffee_shop.mp3",
+    "color": "bg-brown-500"
   }
 ]
