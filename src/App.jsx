@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SoundCard from "./components/SoundCard";
 import PresetSelector from "./components/PresetSelector";
+import PomodoroButton from "./components/PomodoroButton";
+import PomodoroOverlay from "./components/PomodoroOverlay";
 import { useSounds } from "./hooks/useSounds";
 import { useActiveSounds } from "./hooks/useActiveSounds";
 import { useTheme } from "./context/ThemeContext";
 import { X, Play, Sun, Moon, HelpCircle, CircleHelp } from "lucide-react";
 import { Volume2, VolumeX } from "lucide-react";
 import HelpModal from "./components/HelpModal";
+import { usePomodoro } from "./hooks/usePomodoro";
 
 function App() {
-  const { sounds } = useSounds();
   const { theme, toggleTheme } = useTheme();
 
   const [hasSaveData, setHasSaveData] = useState(false);
@@ -43,12 +45,28 @@ function App() {
     localStorage.setItem("zenmix-state", JSON.stringify(soundStates));
   }, [soundStates]);
 
+  // STATE: toggle pomodoro overlay
+  // Format: true, false
+  const [isPomodoroOpen, setIsPomodoroOpen] = useState(false);
+
+  // STATE: set ding in active state when pomodoro is activated so it play when timer runs out
+  // Format: true, false
+  const [playDing, setPlayDing] = useState(false);
+  const dingRef = useRef(new Audio("./sounds/ding.mp3"));
+
+  // All sounds hook
+  const { sounds } = useSounds();
+
+  // Active sounds hook
   const {
     activeSounds,
     setActiveSounds,
     toggleActiveSound,
     toggleActiveSoundAll,
   } = useActiveSounds(setSoundStates);
+
+  // Pomodoro hook
+  const pomodoroState = usePomodoro();
 
   // STATE: holds value in the search Bar
   const [search, setSearch] = useState("");
@@ -144,6 +162,17 @@ function App() {
     });
   }
 
+  // Play ding on timeLeft == 0
+  useEffect(() => {
+    if (!playDing || pomodoroState.timeLeft > 0) {
+      return;
+    } else {
+      dingRef.current.currentTime = 0;
+      dingRef.current.volume = 0.5;
+      dingRef.current.play();
+    }
+  }, [playDing, pomodoroState.timeLeft]);
+
   return (
     <>
       {/* Banner For Saved Data */}
@@ -207,6 +236,16 @@ function App() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Pomodoro overlay */}
+      {isPomodoroOpen && (
+        <PomodoroOverlay
+          {...pomodoroState}
+          setIsPomodoroOpen={setIsPomodoroOpen}
+          setPlayDing={setPlayDing}
+          dingRef={dingRef}
+        />
       )}
 
       {/* PAPER/LATTE BACKGROUND for light mode, dark gray for dark mode */}
@@ -290,6 +329,12 @@ function App() {
             <HelpModal
               isOpen={isHelpOpen}
               onClose={() => setIsHelpOpen(false)}
+            />
+
+            {/* Pomodoro nav button */}
+            <PomodoroButton
+              {...pomodoroState}
+              setIsPomodoroOpen={setIsPomodoroOpen}
             />
           </div>
         </header>
