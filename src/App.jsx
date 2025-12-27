@@ -4,15 +4,16 @@ import PresetSelector from "./components/PresetSelector";
 import { useSounds } from "./hooks/useSounds";
 import { useActiveSounds } from "./hooks/useActiveSounds";
 import { useTheme } from "./context/ThemeContext";
-import { X, Play, Sun, Moon, HelpCircle, CircleHelp } from "lucide-react";
+import { X, Play, Sun, Moon, HelpCircle, CircleHelp, Check } from "lucide-react";
 import { Volume2, VolumeX } from "lucide-react";
 import HelpModal from "./components/HelpModal";
 
 function App() {
   const { sounds } = useSounds();
   const { theme, toggleTheme } = useTheme();
-
+  
   const [hasSaveData, setHasSaveData] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const [hasResponded, setHasResponded] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -190,7 +191,8 @@ const shareMix = () => {
   
   navigator.clipboard.writeText(url).then(() => {
     console.log('Copied to clipboard');
-    alert('Link copied!')
+    setShowToast(true)
+    setTimeout(() => {setShowToast(false)}, 750)
   });
 };
 
@@ -255,6 +257,26 @@ const shareMix = () => {
             >
               <X size={16} />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* TOAST FOR SAVING SHARING MIX */}
+      {showToast && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className={`
+            flex items-center gap-3 px-5 py-2.5 rounded-full shadow-xl ring-1 backdrop-blur-md border
+            ${theme === 'dark' 
+              ? 'bg-gray-800/95 border-green-500/30 ring-white/10 text-gray-100' 
+              : 'bg-white/95 border-green-500/30 ring-black/5 text-stone-800'}
+          `}>
+            <div className={`
+              flex items-center justify-center w-5 h-5 rounded-full
+              ${theme === 'dark' ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-600'}
+            `}>
+              <Check size={12} strokeWidth={3} />
+            </div>
+            <span className="text-sm font-medium">Link copied to clipboard</span>
           </div>
         </div>
       )}
