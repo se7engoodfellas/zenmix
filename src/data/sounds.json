@@ -47,5 +47,12 @@
     "icon": "Coffee", 
     "src":"/sounds/coffee_shop.mp3",
     "color": "bg-brown-500"
+  },
+  {
+    "id":"crickets",
+    "label":"Crickets at Night",
+    "icon":"Bug",
+    "src":"/sounds/crickets.mp3",
+    "color":"bg-yellow-700"
   }
 ]
