@@ -200,7 +200,8 @@ const shareMix = () => {
   navigator.clipboard.writeText(url).then(() => {
     console.log('Copied to clipboard');
     setShowSharedToast(true)
-    setTimeout(() => {setShowToast(false)}, 1750)
+    console.log('test')
+    setTimeout(() => {setShowSharedToast(false)}, 2000)
   });
 };
 
