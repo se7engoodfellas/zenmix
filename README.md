@@ -77,6 +77,28 @@ src/components/          ← UI components
 src/data/sounds.json     ← All sounds are defined here
 src/hooks/               ← Custom hooks
 ```
+## Browser Support
+
+ZenMix works on all modern browsers, including:
+
+- Google Chrome
+- Mozilla Firefox
+- Microsoft Edge
+- Safari
+- Brave
+- Opera
+
+For the best experience, use the latest version of your preferred browser.
+
+## Future Enhancements
+
+Planned improvements include:
+
+- Sleep timer for automatic playback stop
+- Keyboard shortcuts for quick controls
+- Import and export custom sound mixes
+- Favorite sound combinations
+- Progressive Web App (PWA) support
 
 ## License
 
